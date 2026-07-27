@@ -643,7 +643,7 @@
     }
 
     function searchApplication(appNumber, parentId, parentPhone) {
-      if (supabase) {
+      if (supabase && typeof supabase.from === 'function') {
         searchSupabase(appNumber, parentId, parentPhone);
       } else {
         searchLocalStorage(appNumber, parentId, parentPhone);

@@ -178,7 +178,37 @@ form.addEventListener("submit", async function (e) {
       birthCertBase64 = await fileToBase64(uploadedFile);
     }
 
-    if (supabase) {
+    var localAppNumber = "NCA-" + new Date().getFullYear() + "-" + String(Math.floor(Math.random() * 9000) + 1000);
+    var localData = {
+      id: "local_" + Date.now(),
+      app_number: localAppNumber,
+      child_full_name: data.childFullName,
+      gender: data.gender,
+      date_of_birth: data.dateOfBirth,
+      applying_class: data.applyingClass || "Nursery One (Baby Class)",
+      father_full_name: data.fatherFullName || null,
+      father_national_id: data.fatherNationalId || null,
+      father_phone: data.fatherPhone || null,
+      mother_full_name: data.motherFullName || null,
+      mother_national_id: data.motherNationalId || null,
+      mother_phone: data.motherPhone || null,
+      province: data.province || null,
+      district: data.district || null,
+      sector: data.sector || null,
+      cell: data.cell || null,
+      village: data.village || null,
+      birth_certificate_name: uploadedFile ? uploadedFile.name : null,
+      birth_certificate_data: birthCertBase64,
+      status: "Pending",
+      created_at: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem("nca_admission_" + Date.now(), JSON.stringify(localData));
+    } catch (e) {
+      console.warn("LocalStorage backup warning:", e);
+    }
+
+    if (supabase && typeof supabase.from === "function") {
       var insertData = {
         child_full_name: data.childFullName,
         gender: data.gender,

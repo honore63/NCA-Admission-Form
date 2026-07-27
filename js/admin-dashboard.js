@@ -128,20 +128,36 @@ async function loadApplications() {
   if (tableBody) tableBody.innerHTML = '<tr><td colspan="11" class="table-empty"><i class="fas fa-spinner fa-spin"></i> Loading applications...</td></tr>';
 
   try {
-    if (supabase) {
+    if (supabase && typeof supabase.from === "function") {
       var result = await supabase.from("admissions").select("*").order("app_number", { ascending: true });
       if (result.error) throw result.error;
       allApplications = result.data || [];
     } else {
-      allApplications = [];
+      allApplications = loadLocalStorageApplications();
     }
   } catch (err) {
     console.error("Error loading:", err);
-    allApplications = [];
+    allApplications = loadLocalStorageApplications();
   }
 
   filterAndRender();
   addNotification("info", "Applications loaded successfully");
+}
+
+function loadLocalStorageApplications() {
+  var list = [];
+  try {
+    var allKeys = Object.keys(localStorage);
+    allKeys.forEach(function (key) {
+      if (key.indexOf("nca_admission_") === 0 || key.indexOf("admission_") === 0) {
+        try {
+          var item = JSON.parse(localStorage.getItem(key));
+          if (item && (item.child_full_name || item.childFullName)) list.push(item);
+        } catch (e) {}
+      }
+    });
+  } catch (e) {}
+  return list;
 }
 
 // ====== FILTER ======
@@ -353,7 +369,7 @@ async function bulkReject() {
 async function bulkUpdateStatus(apps, status) {
   try {
     for (var i = 0; i < apps.length; i++) {
-      if (supabase) {
+      if (supabase && typeof supabase.from === "function") {
         await supabase.from("admissions").update({ status: status }).eq("id", apps[i].id);
       }
       var idx = allApplications.findIndex(function (a) { return a.id === apps[i].id; });
@@ -374,7 +390,7 @@ async function bulkDelete() {
   showConfirm("Delete " + apps.length + " application(s)?", "This action cannot be undone.", async function () {
     try {
       for (var i = 0; i < apps.length; i++) {
-        if (supabase) await supabase.from("admissions").delete().eq("id", apps[i].id);
+        if (supabase && typeof supabase.from === "function") await supabase.from("admissions").delete().eq("id", apps[i].id);
       }
       allApplications = allApplications.filter(function (a) { return !selectedIds.has(a.id); });
       selectedIds.clear();
@@ -646,7 +662,7 @@ document.getElementById("image-modal").addEventListener("click", function (e) { 
 async function updateStatus(newStatus) {
   if (!selectedApp) return;
   try {
-    if (supabase) {
+    if (supabase && typeof supabase.from === "function") {
       var result = await supabase.from("admissions").update({ status: newStatus }).eq("id", selectedApp.id);
       if (result.error) throw result.error;
     }
@@ -669,7 +685,7 @@ async function quickStatus(id, status) {
   if (!app) return;
   showConfirm("Change status?", "Set application #" + app.app_number + " to " + status + ".", async function () {
     try {
-      if (supabase) await supabase.from("admissions").update({ status: status }).eq("id", id);
+      if (supabase && typeof supabase.from === "function") await supabase.from("admissions").update({ status: status }).eq("id", id);
       var idx = allApplications.findIndex(function (a) { return a.id === id; });
       if (idx !== -1) allApplications[idx].status = status;
       filterAndRender();
@@ -736,7 +752,7 @@ async function saveEdit() {
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
   try {
-    if (supabase) {
+    if (supabase && typeof supabase.from === "function") {
       var result = await supabase.from("admissions").update(d).eq("id", selectedApp.id);
       if (result.error) throw result.error;
     }
@@ -760,7 +776,7 @@ async function deleteApplication() {
   if (!selectedApp) return;
   showConfirm("Delete Application?", "This will permanently delete application #" + selectedApp.app_number + ".", async function () {
     try {
-      if (supabase) await supabase.from("admissions").delete().eq("id", selectedApp.id);
+      if (supabase && typeof supabase.from === "function") await supabase.from("admissions").delete().eq("id", selectedApp.id);
       allApplications = allApplications.filter(function (a) { return a.id !== selectedApp.id; });
       closeModal();
       filterAndRender();
@@ -776,7 +792,7 @@ async function quickDelete(id) {
   if (!app) return;
   showConfirm("Delete Application?", "This will permanently delete application for " + app.child_full_name + ".", async function () {
     try {
-      if (supabase) await supabase.from("admissions").delete().eq("id", id);
+      if (supabase && typeof supabase.from === "function") await supabase.from("admissions").delete().eq("id", id);
       allApplications = allApplications.filter(function (a) { return a.id !== id; });
       filterAndRender();
       showToast("success", "Application deleted.");
