@@ -1,0 +1,15 @@
+-- ============================================
+-- NCA Communication Tables (Legacy)
+-- NOTE: This is now part of setup.sql
+-- Run setup.sql instead for the complete schema
+-- ============================================
+-- 
+-- The main setup.sql file now includes:
+--   - admissions table (with auto-generated app_number)
+--   - announcements table
+--   - messages table
+--   - status_history table
+--   - RLS policies for all tables
+--   - Auto-number trigger
+-- 
+-- Please run setup.sql instead of this file.

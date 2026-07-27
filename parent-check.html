@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Application Status - Nyabihu Christian Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .check-hero {
+      background: linear-gradient(135deg, rgba(13,71,161,0.92), rgba(10,54,120,0.95));
+      color: #fff;
+      padding: 56px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .check-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(249,168,37,0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(255,255,255,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .check-hero-content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+    .check-hero h2 { font-size: 34px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+    .check-hero p { color: rgba(255,255,255,0.75); font-size: 16px; line-height: 1.7; }
+
+    .check-form-wrapper {
+      max-width: 600px;
+      margin: -40px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+    }
+    .check-form-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+      overflow: hidden;
+      border: 1px solid #f3f4f6;
+    }
+    .check-form-header {
+      background: #0D47A1;
+      color: #fff;
+      padding: 24px 32px;
+    }
+    .check-form-header h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .check-form-header p { color: rgba(255,255,255,0.7); font-size: 14px; }
+    .check-form-body { padding: 32px; }
+
+    .check-form-body .form-group { margin-bottom: 20px; }
+    .check-form-body .form-group:last-of-type { margin-bottom: 0; }
+    .check-form-body label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #212121;
+      margin-bottom: 6px;
+    }
+    .check-form-body label .required { color: #ef4444; }
+    .check-form-body .label-hint {
+      display: block;
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .check-form-body input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      color: #212121;
+      background: #fff;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .check-form-body input::placeholder { color: #9ca3af; }
+    .check-form-body input:focus {
+      border-color: #0D47A1;
+      box-shadow: 0 0 0 3px rgba(13,71,161,0.1);
+    }
+    .check-or-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px 0;
+      color: #9ca3af;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .check-or-divider::before,
+    .check-or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+    .check-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 48px;
+      background: #0D47A1;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 28px;
+    }
+    .check-btn:hover { background: #1565C0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(13,71,161,0.4); }
+    .check-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .check-btn .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    .check-btn.loading .spinner { display: inline-block; }
+    .check-btn.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .check-error {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 16px;
+      text-align: center;
+    }
+    .check-error.show { display: block; }
+
+    /* ===== RESULTS ===== */
+    .results-wrapper {
+      max-width: 720px;
+      margin: 32px auto;
+      padding: 0 24px;
+      display: none;
+    }
+    .results-wrapper.show { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .result-status-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+      border: 1px solid #f3f4f6;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .result-status-header {
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .result-status-header h3 { font-size: 18px; font-weight: 600; color: #212121; }
+    .result-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .result-status-badge.pending { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .result-status-badge.admitted { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .result-status-badge.rejected { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .result-status-body { padding: 0 32px 28px; }
+    .result-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .result-detail .detail-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-bottom: 3px;
+    }
+    .result-detail .detail-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: #212121;
+    }
+
+    /* Timeline */
+    .result-section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+      border: 1px solid #f3f4f6;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .result-section-header {
+      padding: 18px 32px;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .result-section-header i { color: #0D47A1; font-size: 16px; }
+    .result-section-header h4 { font-size: 15px; font-weight: 600; color: #212121; }
+    .result-section-body { padding: 24px 32px; }
+
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: #e5e7eb;
+    }
+    .timeline-item {
+      position: relative;
+      padding-bottom: 24px;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute;
+      left: -24px;
+      top: 3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid #e5e7eb;
+      background: #fff;
+    }
+    .timeline-item.active .timeline-dot { border-color: #0D47A1; background: #0D47A1; }
+    .timeline-item.success .timeline-dot { border-color: #2E7D32; background: #2E7D32; }
+    .timeline-item.warning .timeline-dot { border-color: #F9A825; background: #F9A825; }
+    .timeline-date {
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #212121;
+      margin-bottom: 3px;
+    }
+    .timeline-desc {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .messages-list { display: flex; flex-direction: column; gap: 16px; }
+    .message-item {
+      background: #f9fafb;
+      border: 1px solid #f3f4f6;
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .message-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .message-from {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0D47A1;
+    }
+    .message-date {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .message-text {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    .no-messages {
+      text-align: center;
+      padding: 24px;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .admission-letter-card {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 2px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+    .admission-letter-card i {
+      font-size: 40px;
+      color: #2E7D32;
+      margin-bottom: 12px;
+    }
+    .admission-letter-card h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #212121;
+      margin-bottom: 6px;
+    }
+    .admission-letter-card p {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 16px;
+    }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      background: #2E7D32;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .download-btn:hover { background: #15803d; transform: translateY(-1px); }
+
+    .no-results {
+      text-align: center;
+      padding: 56px 32px;
+      display: none;
+    }
+    .no-results.show { display: block; }
+    .no-results i { font-size: 48px; color: #d1d5db; margin-bottom: 16px; }
+    .no-results h3 { font-size: 20px; font-weight: 600; color: #212121; margin-bottom: 8px; }
+    .no-results p { font-size: 14px; color: #6b7280; max-width: 400px; margin: 0 auto 24px; line-height: 1.7; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #0D47A1;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+      margin-top: 8px;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .check-hero h2 { font-size: 24px; }
+      .check-form-body { padding: 24px; }
+      .result-status-header { padding: 20px 24px; }
+      .result-status-body { padding: 0 24px 24px; }
+      .result-section-header { padding: 16px 24px; }
+      .result-section-body { padding: 20px 24px; }
+      .result-detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 1. TOP BAR ===== -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span>&#128205; Nyabihu District, Western Province, Rwanda</span>
+        <span>&#128222; +250 785 453 082</span>
+        <span>&#9993; valentinuwi@gmail.com</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">f</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">&#9737;</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">&#9654;</a>
+        <a href="https://wa.me/250785453082" target="_blank" rel="noopener" title="WhatsApp">&#9900;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 2. MAIN HEADER ===== -->
+  <header class="main-header">
+    <div class="main-header-inner">
+      <div class="header-brand">
+        <a href="index.html"><img src="IMAGES/logo.jpeg" alt="NCA Logo" /></a>
+        <div class="header-brand-text">
+          <h1>NYABIHU CHRISTIAN ACADEMY</h1>
+          <p>Online Admission Portal</p>
+          <span class="tagline">Educate A Child, Transform A Generation.</span>
+        </div>
+      </div>
+      <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </header>
+
+  <!-- ===== 3. HERO SECTION ===== -->
+  <section class="check-hero">
+    <div class="check-hero-content">
+      <h2><i class="fas fa-search" style="color:#F9A825;"></i> Check Application Status</h2>
+      <p>Enter your details below to check the status of your child's admission application at Nyabihu Christian Academy.</p>
+    </div>
+  </section>
+
+  <!-- ===== 4. SEARCH FORM ===== -->
+  <div class="check-form-wrapper">
+    <div class="check-form-card">
+      <div class="check-form-header">
+        <h3><i class="fas fa-clipboard-check"></i> Application Lookup</h3>
+        <p>Provide any combination of details to find your application</p>
+      </div>
+      <div class="check-form-body">
+        <form id="check-form" novalidate>
+          <div class="form-group">
+            <label for="appNumber">
+              Application Number
+              <span class="label-hint">e.g. NCA-2026-0001 (auto-generated after submission)</span>
+            </label>
+            <input type="text" id="appNumber" name="appNumber" placeholder="Enter application number" />
+          </div>
+
+          <div class="check-or-divider">OR</div>
+
+          <div class="form-group">
+            <label for="parentId">
+              Parent's National ID Number <span class="required">*</span>
+            </label>
+            <input type="text" id="parentId" name="parentId" placeholder="Enter national ID number" autocomplete="off" />
+          </div>
+
+          <div class="form-group">
+            <label for="parentPhone">
+              Parent's Telephone Number <span class="required">*</span>
+            </label>
+            <input type="tel" id="parentPhone" name="parentPhone" placeholder="e.g. +250 788 123 456" autocomplete="off" />
+          </div>
+
+          <button type="submit" class="check-btn" id="check-btn">
+            <span class="spinner"></span>
+            <span class="btn-text"><i class="fas fa-search"></i> Search Application</span>
+          </button>
+
+          <div class="check-error" id="check-error"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 5. NO RESULTS ===== -->
+  <div class="no-results" id="no-results">
+    <i class="fas fa-exclamation-circle"></i>
+    <h3>No Application Found</h3>
+    <p>We could not find any application matching the details you provided. Please double-check your information and try again, or contact the school for assistance.</p>
+    <button class="check-btn" onclick="resetSearch()" style="max-width:280px; margin:0 auto;">
+      <span class="btn-text"><i class="fas fa-redo"></i> Try Again</span>
+    </button>
+    <br>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Return to Home Page</a>
+  </div>
+
+  <!-- ===== 6. RESULTS ===== -->
+  <div class="results-wrapper" id="results-wrapper">
+
+    <!-- Status Card -->
+    <div class="result-status-card">
+      <div class="result-status-header">
+        <h3 id="result-child-name">Application Details</h3>
+        <span class="result-status-badge pending" id="result-status-badge">
+          <i class="fas fa-clock"></i> <span id="result-status-text">Pending</span>
+        </span>
+      </div>
+      <div class="result-status-body">
+        <div class="result-detail-grid" id="result-details"></div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="result-section">
+      <div class="result-section-header">
+        <i class="fas fa-stream"></i>
+        <h4>Application Timeline</h4>
+      </div>
+      <div class="result-section-body">
+        <div class="timeline" id="result-timeline"></div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="result-section">
+      <div class="result-section-header">
+        <i class="fas fa-envelope"></i>
+        <h4>Messages from School</h4>
+      </div>
+      <div class="result-section-body">
+        <div class="messages-list" id="result-messages"></div>
+      </div>
+    </div>
+
+    <!-- Admission Letter (if admitted) -->
+    <div class="result-section" id="admission-letter-section" style="display:none;">
+      <div class="result-section-header">
+        <i class="fas fa-file-alt"></i>
+        <h4>Admission Letter</h4>
+      </div>
+      <div class="result-section-body">
+        <div class="admission-letter-card" id="admission-letter-card">
+          <i class="fas fa-graduation-cap"></i>
+          <h4>Congratulations! Your child has been admitted.</h4>
+          <p>You can download the official admission letter below.</p>
+          <button class="download-btn" id="download-letter-btn" onclick="downloadLetter()">
+            <i class="fas fa-download"></i> Download Admission Letter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="text-align:center; margin-top:8px; padding-bottom:40px;">
+      <button class="check-btn" onclick="resetSearch()" style="max-width:280px; margin:0 auto 12px;">
+        <span class="btn-text"><i class="fas fa-redo"></i> Search Another Application</span>
+      </button>
+      <br>
+      <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Return to Home Page</a>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" id="contact">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="IMAGES/logo.jpeg" alt="NCA Logo" />
+        <h3>Nyabihu Christian Academy</h3>
+        <p>Building Bright Futures Through Christian Education.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#admission-section">Apply for Admission</a></li>
+          <li><a href="parent-check.html">Check Admission Status</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact Information</h4>
+        <ul>
+          <li><a href="#">&#128205; Nyabihu District, Western Province, Rwanda</a></li>
+          <li><a href="tel:+250785453082">&#128222; +250 785 453 082</a></li>
+          <li><a href="mailto:valentinuwi@gmail.com">&#9993; valentinuwi@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Office Hours</h4>
+        <ul>
+          <li><a href="#"><strong>Monday &ndash; Sunday</strong></a></li>
+          <li><a href="#"><strong>7:30 AM &ndash; 5:30 PM</strong></a></li>
+        </ul>
+        <h4 style="margin-top:20px;">Follow Us</h4>
+        <div class="footer-social">
+          <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">f</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">&#9737;</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">&#9654;</a>
+          <a href="https://wa.me/250785453082" target="_blank" rel="noopener" title="WhatsApp">&#9900;</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Nyabihu Christian Academy. All Rights Reserved.</p>
+      <p>Designed and Developed for Nyabihu Christian Academy Admission System.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script>
+    var checkForm = document.getElementById('check-form');
+    var checkBtn = document.getElementById('check-btn');
+    var checkError = document.getElementById('check-error');
+    var resultsWrapper = document.getElementById('results-wrapper');
+    var noResults = document.getElementById('no-results');
+    var currentApplication = null;
+
+    checkForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      checkError.classList.remove('show');
+      resultsWrapper.classList.remove('show');
+      noResults.classList.remove('show');
+
+      var appNumber = document.getElementById('appNumber').value.trim();
+      var parentId = document.getElementById('parentId').value.trim();
+      var parentPhone = document.getElementById('parentPhone').value.trim();
+
+      if (!appNumber && !parentId && !parentPhone) {
+        showError('Please enter at least one search criterion: Application Number, National ID, or Telephone Number.');
+        return;
+      }
+
+      checkBtn.classList.add('loading');
+      checkBtn.disabled = true;
+
+      setTimeout(function() {
+        searchApplication(appNumber, parentId, parentPhone);
+      }, 800);
+    });
+
+    function showError(msg) {
+      checkError.textContent = msg;
+      checkError.classList.add('show');
+    }
+
+    function searchApplication(appNumber, parentId, parentPhone) {
+      if (supabase) {
+        searchSupabase(appNumber, parentId, parentPhone);
+      } else {
+        searchLocalStorage(appNumber, parentId, parentPhone);
+      }
+    }
+
+    async function searchSupabase(appNumber, parentId, parentPhone) {
+      try {
+        var query = supabase.from('admissions').select('*');
+
+        var conditions = [];
+        if (appNumber) {
+          conditions.push(query.ilike('app_number', '%' + appNumber + '%'));
+        }
+        if (parentId) {
+          conditions.push(
+            query.or('father_national_id.ilike.%' + parentId + '%,mother_national_id.ilike.%' + parentId + '%')
+          );
+        }
+        if (parentPhone) {
+          conditions.push(
+            query.or('father_phone.ilike.%' + parentPhone + '%,mother_phone.ilike.%' + parentPhone + '%')
+          );
+        }
+
+        var result = await supabase
+          .from('admissions')
+          .select('*')
+          .or(
+            (appNumber ? 'app_number.ilike.%' + appNumber + '%' : 'id.eq.00000000-0000-0000-0000-000000000000') +
+            ',' +
+            (parentId ? 'father_national_id.ilike.%' + parentId + '%,mother_national_id.ilike.%' + parentId + '%' : '') +
+            ',' +
+            (parentPhone ? 'father_phone.ilike.%' + parentPhone + '%,mother_phone.ilike.%' + parentPhone + '%' : '')
+          );
+
+        if (result.error) throw result.error;
+
+        if (result.data && result.data.length > 0) {
+          currentApplication = result.data[0];
+          displayResults(currentApplication);
+        } else {
+          noResults.classList.add('show');
+        }
+      } catch (err) {
+        console.error('Supabase search error:', err);
+        searchLocalStorage(appNumber, parentId, parentPhone);
+      } finally {
+        checkBtn.classList.remove('loading');
+        checkBtn.disabled = false;
+      }
+    }
+
+    function searchLocalStorage(appNumber, parentId, parentPhone) {
+      var allKeys = Object.keys(localStorage);
+      var applicationKeys = allKeys.filter(function(key) {
+        return key.indexOf('nca_admission_') === 0 || key.indexOf('admission_') === 0;
+      });
+
+      var matches = [];
+
+      applicationKeys.forEach(function(key) {
+        try {
+          var data = JSON.parse(localStorage.getItem(key));
+          if (!data || typeof data !== 'object') return;
+
+          var found = false;
+
+          if (appNumber && data.app_number && data.app_number.toLowerCase().indexOf(appNumber.toLowerCase()) !== -1) {
+            found = true;
+          }
+          if (!found && appNumber && key.toLowerCase().indexOf(appNumber.toLowerCase()) !== -1) {
+            found = true;
+          }
+
+          if (!found && parentId) {
+            var pid = parentId.toLowerCase();
+            if ((data.father_national_id && data.father_national_id.toLowerCase().indexOf(pid) !== -1) ||
+                (data.mother_national_id && data.mother_national_id.toLowerCase().indexOf(pid) !== -1)) {
+              found = true;
+            }
+          }
+
+          if (!found && parentPhone) {
+            var pp = parentPhone.replace(/\s+/g, '').replace(/-/g, '');
+            if (data.father_phone) {
+              var fp = data.father_phone.replace(/\s+/g, '').replace(/-/g, '');
+              if (fp.indexOf(pp) !== -1 || pp.indexOf(fp) !== -1) found = true;
+            }
+            if (!found && data.mother_phone) {
+              var mp = data.mother_phone.replace(/\s+/g, '').replace(/-/g, '');
+              if (mp.indexOf(pp) !== -1 || pp.indexOf(mp) !== -1) found = true;
+            }
+          }
+
+          if (found) {
+            matches.push(data);
+          }
+        } catch (e) { /* skip non-JSON entries */ }
+      });
+
+      allKeys.forEach(function(key) {
+        if (key.indexOf('nca_') === -1 && key.indexOf('admission_') === -1 && key.indexOf('application_') === -1) {
+          try {
+            var raw = localStorage.getItem(key);
+            var data = JSON.parse(raw);
+            if (!data || typeof data !== 'object') return;
+            if (!data.child_full_name && !data.childFullName) return;
+
+            var found = false;
+            if (appNumber && data.app_number && data.app_number.toLowerCase().indexOf(appNumber.toLowerCase()) !== -1) found = true;
+
+            if (!found && parentId) {
+              var pid = parentId.toLowerCase();
+              if ((data.father_national_id && data.father_national_id.toLowerCase().indexOf(pid) !== -1) ||
+                  (data.mother_national_id && data.mother_national_id.toLowerCase().indexOf(pid) !== -1)) {
+                found = true;
+              }
+            }
+
+            if (!found && parentPhone) {
+              var pp = parentPhone.replace(/\s+/g, '').replace(/-/g, '');
+              if (data.father_phone) {
+                var fp = data.father_phone.replace(/\s+/g, '').replace(/-/g, '');
+                if (fp.indexOf(pp) !== -1 || pp.indexOf(fp) !== -1) found = true;
+              }
+              if (!found && data.mother_phone) {
+                var mp = data.mother_phone.replace(/\s+/g, '').replace(/-/g, '');
+                if (mp.indexOf(pp) !== -1 || pp.indexOf(mp) !== -1) found = true;
+              }
+            }
+
+            if (found) {
+              var already = matches.some(function(m) {
+                return (m.father_national_id === data.father_national_id && m.child_full_name === data.child_full_name) ||
+                       (m.child_full_name === data.childFullName && m.child_full_name === undefined);
+              });
+              if (!already) matches.push(data);
+            }
+          } catch (e) { /* skip */ }
+        }
+      });
+
+      var statusKeys = allKeys.filter(function(key) {
+        return key.indexOf('nca_status_') === 0;
+      });
+      statusKeys.forEach(function(key) {
+        try {
+          var statusData = JSON.parse(localStorage.getItem(key));
+          if (!statusData) return;
+
+          var found = false;
+          if (appNumber && statusData.app_number && statusData.app_number.toLowerCase().indexOf(appNumber.toLowerCase()) !== -1) found = true;
+
+          if (!found && parentId) {
+            var pid = parentId.toLowerCase();
+            if ((statusData.father_national_id && statusData.father_national_id.toLowerCase().indexOf(pid) !== -1) ||
+                (statusData.mother_national_id && statusData.mother_national_id.toLowerCase().indexOf(pid) !== -1)) {
+              found = true;
+            }
+          }
+
+          if (!found && parentPhone) {
+            var pp = parentPhone.replace(/\s+/g, '').replace(/-/g, '');
+            if (statusData.father_phone) {
+              var fp = statusData.father_phone.replace(/\s+/g, '').replace(/-/g, '');
+              if (fp.indexOf(pp) !== -1 || pp.indexOf(fp) !== -1) found = true;
+            }
+            if (!found && statusData.mother_phone) {
+              var mp = statusData.mother_phone.replace(/\s+/g, '').replace(/-/g, '');
+              if (mp.indexOf(pp) !== -1 || pp.indexOf(mp) !== -1) found = true;
+            }
+          }
+
+          if (found) {
+            var merged = false;
+            for (var i = 0; i < matches.length; i++) {
+              if (matches[i].child_full_name === statusData.child_full_name || matches[i].childFullName === statusData.child_full_name) {
+                matches[i] = Object.assign({}, matches[i], statusData);
+                merged = true;
+                break;
+              }
+            }
+            if (!merged) matches.push(statusData);
+          }
+        } catch (e) { /* skip */ }
+      });
+
+      checkBtn.classList.remove('loading');
+      checkBtn.disabled = false;
+
+      if (matches.length > 0) {
+        currentApplication = matches[0];
+        displayResults(currentApplication);
+      } else {
+        noResults.classList.add('show');
+      }
+    }
+
+    function displayResults(app) {
+      noResults.classList.remove('show');
+      resultsWrapper.classList.add('show');
+
+      var childName = app.child_full_name || app.childFullName || 'N/A';
+      document.getElementById('result-child-name').textContent = childName + '\'s Application';
+
+      var status = (app.status || 'Pending').trim();
+      var badge = document.getElementById('result-status-badge');
+      var statusText = document.getElementById('result-status-text');
+
+      badge.className = 'result-status-badge';
+      if (status.toLowerCase() === 'admitted') {
+        badge.classList.add('admitted');
+        statusText.innerHTML = '<i class="fas fa-check-circle"></i> Admitted';
+      } else if (status.toLowerCase() === 'rejected') {
+        badge.classList.add('rejected');
+        statusText.innerHTML = '<i class="fas fa-times-circle"></i> Not Admitted';
+      } else {
+        badge.classList.add('pending');
+        statusText.innerHTML = '<i class="fas fa-clock"></i> ' + status;
+      }
+
+      var details = document.getElementById('result-details');
+      var gender = app.gender || 'N/A';
+      var dob = app.date_of_birth || app.dateOfBirth || 'N/A';
+      var cls = app.applying_class || 'Nursery One (Baby Class)';
+      var father = app.father_full_name || 'N/A';
+      var mother = app.mother_full_name || 'N/A';
+      var submitted = app.created_at || app.submittedAt || app.created || 'N/A';
+      var appNum = app.app_number || app.id || 'N/A';
+      var address = [app.sector, app.cell, app.village, app.district, app.province].filter(function(x){ return x; }).join(', ') || 'N/A';
+
+      if (submitted && submitted !== 'N/A') {
+        try {
+          var d = new Date(submitted);
+          submitted = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+      }
+      if (dob && dob !== 'N/A') {
+        try {
+          var d2 = new Date(dob);
+          dob = d2.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch(e) {}
+      }
+
+      details.innerHTML =
+        '<div class="result-detail"><div class="detail-label">Application Number</div><div class="detail-value">' + appNum + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Class Applying For</div><div class="detail-value">' + cls + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Gender</div><div class="detail-value">' + gender + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Date of Birth</div><div class="detail-value">' + dob + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Father</div><div class="detail-value">' + father + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Mother</div><div class="detail-value">' + mother + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Address</div><div class="detail-value">' + address + '</div></div>' +
+        '<div class="result-detail"><div class="detail-label">Date Submitted</div><div class="detail-value">' + submitted + '</div></div>';
+
+      buildTimeline(app, status);
+
+      buildMessages(app);
+
+      var letterSection = document.getElementById('admission-letter-section');
+      if (status.toLowerCase() === 'admitted') {
+        letterSection.style.display = 'block';
+        currentApplication = app;
+      } else {
+        letterSection.style.display = 'none';
+      }
+
+      window.scrollTo({ top: resultsWrapper.offsetTop - 20, behavior: 'smooth' });
+    }
+
+    function buildTimeline(app, status) {
+      var timeline = document.getElementById('result-timeline');
+      var html = '';
+      var submitted = app.created_at || app.submittedAt || app.created || null;
+
+      var submitDate = 'Unknown date';
+      if (submitted) {
+        try {
+          var d = new Date(submitted);
+          submitDate = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) +
+                       ' at ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        } catch(e) { submitDate = submitted; }
+      }
+
+      html += '<div class="timeline-item success">' +
+        '<div class="timeline-dot"></div>' +
+        '<div class="timeline-date">' + submitDate + '</div>' +
+        '<div class="timeline-title">Application Submitted</div>' +
+        '<div class="timeline-desc">Your child\'s admission application was successfully submitted and received by the school.</div>' +
+        '</div>';
+
+      html += '<div class="timeline-item active">' +
+        '<div class="timeline-dot"></div>' +
+        '<div class="timeline-date">Processing</div>' +
+        '<div class="timeline-title">Application Under Review</div>' +
+        '<div class="timeline-desc">The school administration is reviewing your application and verifying the submitted documents.</div>' +
+        '</div>';
+
+      var timelineEntries = app.timeline || app.status_history || app.events || null;
+      if (timelineEntries && Array.isArray(timelineEntries)) {
+        timelineEntries.forEach(function(entry) {
+          var dateStr = '';
+          if (entry.date || entry.created_at || entry.timestamp) {
+            try {
+              var ed = new Date(entry.date || entry.created_at || entry.timestamp);
+              dateStr = ed.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            } catch(e) { dateStr = entry.date || ''; }
+          }
+          var cssClass = 'active';
+          var title = entry.title || entry.action || entry.event || 'Update';
+          if (title.toLowerCase().indexOf('admit') !== -1) cssClass = 'success';
+          else if (title.toLowerCase().indexOf('reject') !== -1) cssClass = 'warning';
+
+          html += '<div class="timeline-item ' + cssClass + '">' +
+            '<div class="timeline-dot"></div>' +
+            '<div class="timeline-date">' + dateStr + '</div>' +
+            '<div class="timeline-title">' + title + '</div>' +
+            '<div class="timeline-desc">' + (entry.description || entry.message || entry.details || '') + '</div>' +
+            '</div>';
+        });
+      }
+
+      if (status.toLowerCase() === 'admitted') {
+        html += '<div class="timeline-item success">' +
+          '<div class="timeline-dot"></div>' +
+          '<div class="timeline-date">Decision</div>' +
+          '<div class="timeline-title">Application Admitted</div>' +
+          '<div class="timeline-desc">Congratulations! Your child has been admitted to Nyabihu Christian Academy. Please download the admission letter below.</div>' +
+          '</div>';
+      } else if (status.toLowerCase() === 'rejected') {
+        html += '<div class="timeline-item warning">' +
+          '<div class="timeline-dot"></div>' +
+          '<div class="timeline-date">Decision</div>' +
+          '<div class="timeline-title">Application Not Admitted</div>' +
+          '<div class="timeline-desc">We regret to inform you that your child\'s application was not successful at this time. Please contact the school for more information.</div>' +
+          '</div>';
+      }
+
+      timeline.innerHTML = html;
+    }
+
+    function buildMessages(app) {
+      var container = document.getElementById('result-messages');
+      var messages = app.messages || app.notes || app.communications || null;
+
+      if (messages && Array.isArray(messages) && messages.length > 0) {
+        var html = '';
+        messages.forEach(function(msg) {
+          var dateStr = '';
+          if (msg.date || msg.created_at || msg.timestamp) {
+            try {
+              var md = new Date(msg.date || msg.created_at || msg.timestamp);
+              dateStr = md.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            } catch(e) { dateStr = msg.date || ''; }
+          }
+          html += '<div class="message-item">' +
+            '<div class="message-meta">' +
+            '<span class="message-from"><i class="fas fa-school"></i> ' + (msg.from || 'School Administration') + '</span>' +
+            '<span class="message-date">' + dateStr + '</span>' +
+            '</div>' +
+            '<div class="message-text">' + (msg.text || msg.message || msg.content || '') + '</div>' +
+            '</div>';
+        });
+        container.innerHTML = html;
+      } else {
+        var status = (app.status || 'Pending').toLowerCase();
+        var introMsg = '';
+        if (status === 'admitted') {
+          introMsg = 'Congratulations on your child\'s admission! Please find the admission letter available for download. We look forward to welcoming your child to Nyabihu Christian Academy.';
+        } else if (status === 'rejected') {
+          introMsg = 'We are unable to offer a place at this time. Please contact the school office for further guidance.';
+        } else {
+          introMsg = 'Your application has been received and is currently being processed. You will receive updates as your application progresses. Please check back periodically for the latest status.';
+        }
+
+        var now = new Date();
+        var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        container.innerHTML =
+          '<div class="message-item">' +
+          '<div class="message-meta">' +
+          '<span class="message-from"><i class="fas fa-school"></i> School Administration</span>' +
+          '<span class="message-date">' + dateStr + '</span>' +
+          '</div>' +
+          '<div class="message-text">' + introMsg + '</div>' +
+          '</div>';
+
+        container.innerHTML +=
+          '<div class="message-item">' +
+          '<div class="message-meta">' +
+          '<span class="message-from"><i class="fas fa-info-circle"></i> System Notice</span>' +
+          '<span class="message-date">' + dateStr + '</span>' +
+          '</div>' +
+          '<div class="message-text">For any inquiries, please contact us at <strong>+250 785 453 082</strong> or email <strong>valentinuwi@gmail.com</strong>. Our office is open every day from 7:30 AM to 5:30 PM.</div>' +
+          '</div>';
+      }
+    }
+
+    function downloadLetter() {
+      if (!currentApplication) return;
+
+      var childName = currentApplication.child_full_name || currentApplication.childFullName || 'Student';
+      var fatherName = currentApplication.father_full_name || 'Parent/Guardian';
+      var appNum = currentApplication.app_number || currentApplication.id || 'N/A';
+      var cls = currentApplication.applying_class || 'Nursery One (Baby Class)';
+
+      var now = new Date();
+      var dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      var letterContent =
+        'NYABIHU CHRISTIAN ACADEMY\n' +
+        'Nyabihu District, Western Province, Rwanda\n' +
+        'Tel: +250 785 453 082 | Email: valentinuwi@gmail.com\n' +
+        '================================================\n\n' +
+        'ADMISSION LETTER\n\n' +
+        'Date: ' + dateStr + '\n' +
+        'Application Number: ' + appNum + '\n\n' +
+        'Dear ' + fatherName + ',\n\n' +
+        'We are pleased to inform you that your child, ' + childName + ',\n' +
+        'has been admitted to Nyabihu Christian Academy for the\n' +
+        'academic year 2026-2027.\n\n' +
+        'Class Admitted: ' + cls + '\n\n' +
+        'Please complete the enrollment process by visiting the\n' +
+        'school administration office with the required documents.\n\n' +
+        'We welcome your family to the NCA community and look\n' +
+        'forward to providing quality Christian education to\n' +
+        'your child.\n\n' +
+        '"Educate A Child, Transform A Generation."\n\n' +
+        'Yours faithfully,\n\n' +
+        '____________________________\n' +
+        'School Administration\n' +
+        'Nyabihu Christian Academy';
+
+      var blob = new Blob([letterContent], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'NCA_Admission_Letter_' + childName.replace(/\s+/g, '_') + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function resetSearch() {
+      checkForm.reset();
+      checkError.classList.remove('show');
+      resultsWrapper.classList.remove('show');
+      noResults.classList.remove('show');
+      currentApplication = null;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

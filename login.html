@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCA - Administrator Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <div class="top-bar-left">
+        <span>&#128205; Nyabihu District, Western Province, Rwanda</span>
+        <span>&#128222; +250 785 453 082</span>
+        <span>&#9993; valentinuwi@gmail.com</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">f</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">&#9737;</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">&#9654;</a>
+        <a href="https://wa.me/250785453082" target="_blank" rel="noopener" title="WhatsApp">&#9900;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="main-header">
+    <div class="main-header-inner">
+      <div class="header-brand">
+        <img src="IMAGES/logo.jpeg" alt="NCA Logo" />
+        <div class="header-brand-text">
+          <h1>NYABIHU CHRISTIAN ACADEMY</h1>
+          <p>Online Admission Portal</p>
+          <span class="tagline">Educate A Child, Transform A Generation.</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="login-page">
+    <div class="login-card">
+      <img src="IMAGES/logo.jpeg" alt="NCA Logo" class="login-logo" />
+      <h2>Administrator Portal</h2>
+      <p class="login-subtitle">Sign in to access the admin dashboard</p>
+
+      <div class="login-error" id="login-error">
+        Invalid email or password. Please try again.
+      </div>
+
+      <form class="login-form" id="login-form" onsubmit="return handleLogin(event)">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter admin email" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%; height:2.75rem; margin-top:0.5rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <a href="index.html">&larr; Back to Admission Form</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    if (isLoggedIn()) {
+      window.location.href = "admin.html";
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      var email = document.getElementById("email").value.trim();
+      var password = document.getElementById("password").value;
+      var errorEl = document.getElementById("login-error");
+      var btn = document.getElementById("login-btn");
+
+      errorEl.classList.remove("show");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading-spinner"></span> Signing in...';
+
+      setTimeout(function () {
+        if (login(email, password)) {
+          window.location.href = "admin.html";
+        } else {
+          errorEl.classList.add("show");
+          btn.disabled = false;
+          btn.textContent = "Sign In";
+          document.getElementById("password").value = "";
+          document.getElementById("password").focus();
+        }
+      }, 800);
+    }
+  </script>
+
+  <footer class="footer">
+    &copy; 2026 Nyabihu Christian Academy. All Rights Reserved. Designed and Developed for Nyabihu Christian Academy Admission System.
+  </footer>
+</body>
+</html>

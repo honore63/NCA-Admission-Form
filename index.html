@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nyabihu Christian Academy - Online Admission Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== SUCCESS SCREEN ===== -->
+  <div id="success-screen" class="success-screen" style="display: none;">
+    <div class="success-card">
+      <div class="success-icon">&#10003;</div>
+      <h2>Application Submitted Successfully!</h2>
+      <p>Thank you for submitting your child's admission application to Nyabihu Christian Academy (NCA).</p>
+      <p>Your application has been received and is now under review by the school administration.</p>
+      <div class="note">Please note that submitting this application does not guarantee admission.</div>
+      <p class="thanks">Thank you for choosing Nyabihu Christian Academy.</p>
+      <button onclick="resetForm()" class="btn btn-primary-solid" style="width:100%; margin-top:1rem;">Submit Another Application</button>
+    </div>
+  </div>
+
+  <!-- ===== MAIN FORM PAGE ===== -->
+  <div id="form-page">
+
+    <!-- ===== 1. TOP BAR ===== -->
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <div class="top-bar-left">
+          <span>&#128205; Nyabihu District, Western Province, Rwanda</span>
+          <span>&#128222; +250 785 453 082</span>
+          <span>&#9993; valentinuwi@gmail.com</span>
+        </div>
+        <div class="top-bar-right">
+          <a href="login.html" class="top-admin-link" title="Admin Login">&#128274; Admin</a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">f</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">&#9737;</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">&#9654;</a>
+          <a href="https://wa.me/250785453082" target="_blank" rel="noopener" title="WhatsApp">&#9900;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 2. MAIN HEADER ===== -->
+    <header class="main-header">
+      <div class="main-header-inner">
+        <div class="header-brand">
+          <img src="IMAGES/logo.jpeg" alt="NCA Logo" />
+          <div class="header-brand-text">
+            <h1>NYABIHU CHRISTIAN ACADEMY</h1>
+            <p>Online Admission Portal</p>
+            <span class="tagline">Educate A Child, Transform A Generation.</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== 3. NAVIGATION BAR ===== -->
+    <nav class="nav-bar">
+      <div class="nav-inner">
+        <div class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#about">About Us</a>
+          <a href="#admission-section">Apply for Admission</a>
+          <a href="parent-check.html">Check Admission Status</a>
+          <a href="#announcements">Announcements</a>
+          <a href="#contact">Contact Us</a>
+        </div>
+        <a href="#admission-section" class="nav-apply-btn">&#10003; Apply Now</a>
+      </div>
+    </nav>
+
+    <!-- ===== 4. HOME BANNER / HERO ===== -->
+    <section class="hero">
+      <div class="hero-content">
+        <h2>Welcome to Nyabihu Christian Academy</h2>
+        <p class="hero-sub">Our online admission portal makes it simple and convenient to apply for your child's future. Complete the application form below to begin the enrollment process for the upcoming academic year.</p>
+        <div class="hero-highlight">&#9733; Admission for Nursery One (Baby Class) &ndash; Academic Year 2026&ndash;2027 is now open.</div>
+        <div class="hero-buttons">
+          <a href="#admission-section" class="btn-primary">&#10003; Apply Now</a>
+          <a href="parent-check.html" class="btn-outline">&#128269; Check Admission Status</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 5. INFORMATION CARDS SECTION ===== -->
+    <section class="section" id="about">
+      <div class="section-title">
+        <h2>Admission Requirements</h2>
+        <p>Please review the following requirements carefully before completing your application.</p>
+        <div class="title-bar"></div>
+      </div>
+      <div class="cards-grid">
+
+        <!-- Card 1: Eligibility -->
+        <div class="info-card blue">
+          <div class="card-icon">&#128203;</div>
+          <h3>Eligibility</h3>
+          <ul>
+            <li>The applicant must be applying for <strong>Nursery One (N1/Baby Class)</strong>.</li>
+            <li>The child must be <strong>at least three (3) years old</strong>.</li>
+            <li><strong>Children who are less than three (3) years old, even by one day, are not eligible for admission.</strong></li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Required Information -->
+        <div class="info-card green">
+          <div class="card-icon">&#128196;</div>
+          <h3>Required Information</h3>
+          <ul>
+            <li>Child's Full Name, Gender, and Date of Birth.</li>
+            <li>Father's Full Name, National ID, and Telephone.</li>
+            <li>Mother's Full Name, National ID, and Telephone.</li>
+            <li>Residential Address (Province, District, Sector, Cell, Village).</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Required Document -->
+        <div class="info-card purple">
+          <div class="card-icon">&#128194;</div>
+          <h3>Required Document</h3>
+          <ul>
+            <li>Upload a clear copy of the child's <strong>Birth Certificate</strong> issued through IREMBO or National Civil Registration System.</li>
+            <li><strong>Accepted Formats:</strong> PDF, JPG, JPEG, PNG.</li>
+            <li><strong>Maximum File Size:</strong> 100 MB.</li>
+            <li><strong>Maximum Files:</strong> 1 Birth Certificate.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== 6. WELCOME + CRITERIA CARD ===== -->
+    <section class="container" style="max-width:52rem; margin:0 auto; padding:0 1.25rem 2rem;">
+      <div class="welcome-card">
+        <div class="welcome-inner">
+          <img src="IMAGES/logo.jpeg" alt="NCA Logo" />
+          <div>
+            <h2>Welcome to Nyabihu Christian Academy</h2>
+            <p>We are pleased that you have chosen our school. Please complete the admission form carefully using accurate information.</p>
+          </div>
+        </div>
+        <div class="welcome-criteria">
+          <h3>&#9878; Important Notice</h3>
+          <ul>
+            <li>Ensure that all information provided is <strong>correct and truthful</strong>.</li>
+            <li>The uploaded Birth Certificate must belong to the child applying for admission.</li>
+            <li>Incomplete applications or applications with incorrect information may not be processed.</li>
+            <li>Submitting an application <strong>does not guarantee admission</strong>.</li>
+            <li>The school administration will review every application before making the final admission decision.</li>
+            <li>Parents or guardians may update their application details <strong>before the admission review process begins</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 7. ADMISSION FORM SECTION ===== -->
+    <section class="container" id="admission-section" style="max-width:52rem; margin:0 auto; padding:0 1.25rem 3rem;">
+      <form id="admission-form" novalidate>
+
+        <!-- Form Section Wrapper -->
+        <div class="form-section">
+
+          <!-- Gradient Header -->
+          <div class="form-section-header">
+            <h2>Admission Application Form</h2>
+            <p>Complete all required fields to submit your application</p>
+          </div>
+
+          <div class="form-section-body">
+
+            <!-- Card 1: Child Information -->
+            <div class="form-card">
+              <div class="form-card-header">
+                <span class="ficon ficon-blue">&#128103;</span>
+                Child Information
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="childFullName">Child's Full Name <span class="required">*</span></label>
+                  <input type="text" id="childFullName" name="childFullName" placeholder="Enter child's full name" autocomplete="name" />
+                  <span class="error-msg" id="err-childFullName"></span>
+                </div>
+                <div class="form-group">
+                  <label for="gender">Gender <span class="required">*</span></label>
+                  <select id="gender" name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <span class="error-msg" id="err-gender"></span>
+                </div>
+                <div class="form-group">
+                  <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                  <input type="date" id="dateOfBirth" name="dateOfBirth" />
+                  <span class="error-msg" id="err-dateOfBirth"></span>
+                </div>
+                <div class="form-group">
+                  <label for="applyingClass">Applying Class</label>
+                  <select id="applyingClass" name="applyingClass">
+                    <option value="Nursery One (Baby Class)">Nursery One (Baby Class)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Parent Information -->
+            <div class="form-card">
+              <div class="form-card-header">
+                <span class="ficon ficon-green">&#128106;</span>
+                Parent Information
+              </div>
+              <div class="form-grid">
+                <!-- Father -->
+                <div class="form-group">
+                  <p class="sub-heading">Father's Details</p>
+                  <div style="display:flex; flex-direction:column; gap:1rem;">
+                    <div class="form-group">
+                      <label for="fatherFullName">Full Name</label>
+                      <input type="text" id="fatherFullName" name="fatherFullName" placeholder="Enter father's full name" />
+                    </div>
+                    <div class="form-group">
+                      <label for="fatherNationalId">National ID Number</label>
+                      <input type="text" id="fatherNationalId" name="fatherNationalId" placeholder="Enter national ID" />
+                    </div>
+                    <div class="form-group">
+                      <label for="fatherPhone">Telephone Number</label>
+                      <input type="tel" id="fatherPhone" name="fatherPhone" placeholder="e.g. +250 788 123 456" />
+                    </div>
+                  </div>
+                </div>
+                <!-- Mother -->
+                <div class="form-group">
+                  <p class="sub-heading">Mother's Details</p>
+                  <div style="display:flex; flex-direction:column; gap:1rem;">
+                    <div class="form-group">
+                      <label for="motherFullName">Full Name</label>
+                      <input type="text" id="motherFullName" name="motherFullName" placeholder="Enter mother's full name" />
+                    </div>
+                    <div class="form-group">
+                      <label for="motherNationalId">National ID Number</label>
+                      <input type="text" id="motherNationalId" name="motherNationalId" placeholder="Enter national ID" />
+                    </div>
+                    <div class="form-group">
+                      <label for="motherPhone">Telephone Number</label>
+                      <input type="tel" id="motherPhone" name="motherPhone" placeholder="e.g. +250 788 654 321" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Address -->
+            <div class="form-card">
+              <div class="form-card-header">
+                <span class="ficon ficon-purple">&#127968;</span>
+                Address
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="province">Province</label>
+                  <input type="text" id="province" name="province" placeholder="e.g. Western" />
+                </div>
+                <div class="form-group">
+                  <label for="district">District</label>
+                  <input type="text" id="district" name="district" placeholder="e.g. Nyabihu" />
+                </div>
+                <div class="form-group">
+                  <label for="sector">Sector</label>
+                  <input type="text" id="sector" name="sector" placeholder="Enter sector" />
+                </div>
+                <div class="form-group">
+                  <label for="cell">Cell</label>
+                  <input type="text" id="cell" name="cell" placeholder="Enter cell" />
+                </div>
+                <div class="form-group full-width">
+                  <label for="village">Village</label>
+                  <input type="text" id="village" name="village" placeholder="Enter village" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Birth Certificate Upload -->
+            <div class="form-card">
+              <div class="form-card-header">
+                <span class="ficon ficon-purple">&#128194;</span>
+                Birth Certificate Upload
+              </div>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label for="birthCertificate">Upload Birth Certificate (Icyemezo cy'Amavuko) <span class="required">*</span></label>
+                  <div class="upload-area" id="upload-area">
+                    <input type="file" id="birthCertificate" name="birthCertificate" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" />
+                    <div class="upload-content" id="upload-content">
+                      <div class="upload-icon">&#128194;</div>
+                      <p class="upload-text">Click to upload or drag and drop</p>
+                      <p class="upload-hint">PDF, JPG, JPEG, PNG &bull; Max 100 MB &bull; 1 file only</p>
+                    </div>
+                    <div class="upload-preview" id="upload-preview" style="display:none;">
+                      <span class="upload-file-icon">&#128196;</span>
+                      <div class="upload-file-info">
+                        <span class="upload-file-name" id="upload-file-name"></span>
+                        <span class="upload-file-size" id="upload-file-size"></span>
+                      </div>
+                      <button type="button" class="upload-remove" id="upload-remove" title="Remove file">&times;</button>
+                    </div>
+                  </div>
+                  <span class="error-msg" id="err-birthCertificate"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="btn-group">
+              <button type="submit" class="btn btn-primary-solid" id="submit-btn">
+                &#10003; Submit Application
+              </button>
+              <button type="button" class="btn btn-outline" onclick="clearForm()" style="color:var(--gray-600); border-color:var(--gray-200);">
+                Clear Form
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ===== 8. FOOTER ===== -->
+    <footer class="site-footer" id="contact">
+      <div class="footer-top">
+
+        <!-- Column 1: Brand -->
+        <div class="footer-brand">
+          <img src="IMAGES/logo.jpeg" alt="NCA Logo" />
+          <h3>Nyabihu Christian Academy</h3>
+          <p>Building Bright Futures Through Christian Education.</p>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#admission-section">Apply for Admission</a></li>
+            <li><a href="parent-check.html">Check Application Status</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Contact Information -->
+        <div class="footer-col">
+          <h4>Contact Information</h4>
+          <ul>
+            <li><a href="#">&#128205; Nyabihu District, Western Province, Rwanda</a></li>
+            <li><a href="tel:+250785453082">&#128222; +250 785 453 082</a></li>
+            <li><a href="mailto:valentinuwi@gmail.com">&#9993; valentinuwi@gmail.com</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Office Hours + Social -->
+        <div class="footer-col">
+          <h4>Office Hours</h4>
+          <ul>
+            <li><a href="#"><strong>Monday &ndash; Sunday</strong></a></li>
+            <li><a href="#"><strong>7:30 AM &ndash; 5:30 PM</strong></a></li>
+            <li><a href="#">We are available every day to assist parents and guardians.</a></li>
+          </ul>
+          <h4 style="margin-top:20px;">Follow Us</h4>
+          <div class="footer-social">
+            <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">f</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">&#9737;</a>
+            <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube">&#9654;</a>
+            <a href="https://wa.me/250785453082" target="_blank" rel="noopener" title="WhatsApp">&#9900;</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Nyabihu Christian Academy. All Rights Reserved.</p>
+        <p>Designed and Developed for Nyabihu Christian Academy Admission System.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admission-form.js"></script>
+</body>
+</html>

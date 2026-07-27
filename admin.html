@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCA Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/auth.js"></script>
+</head>
+<body>
+
+  <script>
+    if (!isLoggedIn()) { window.location.href = "login.html"; }
+  </script>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="IMAGES/logo.jpeg" alt="NCA" class="sidebar-logo" />
+      <div class="sidebar-brand">
+        <h2>NCA Admin</h2>
+        <p>Admission Portal</p>
+      </div>
+      <button class="sidebar-close" id="sidebar-close"><i class="fas fa-times"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-page="dashboard"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+      <a href="#" class="sidebar-link" data-page="applications"><i class="fas fa-file-alt"></i><span>Applications</span></a>
+      <a href="#" class="sidebar-link" data-page="communication"><i class="fas fa-comments"></i><span>Communication</span></a>
+      <a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+      <a href="#" class="sidebar-link" data-page="notifications"><i class="fas fa-bell"></i><span>Notifications</span><span class="sidebar-badge" id="notif-badge">0</span></a>
+      <a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" id="theme-toggle"><i class="fas fa-moon"></i><span>Dark Mode</span></a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-main" id="admin-main">
+
+    <!-- TOP HEADER -->
+    <header class="admin-topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+        <div class="breadcrumb" id="breadcrumb"><span>Dashboard</span></div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon" id="topbar-theme"><i class="fas fa-moon"></i></button>
+        <button class="topbar-icon" id="topbar-notif"><i class="fas fa-bell"></i><span class="notif-dot" id="notif-dot"></span></button>
+        <div class="topbar-profile" id="topbar-profile">
+          <img src="IMAGES/logo.jpeg" alt="Admin" />
+          <span>Administrator</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <a href="#" data-page="profile"><i class="fas fa-user"></i> My Profile</a>
+          <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <div class="admin-page active" id="page-dashboard">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p>Welcome back, Administrator</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card total"><div class="stat-icon"><i class="fas fa-file-alt"></i></div><p class="stat-label">Total Applications</p><h3 class="stat-value" id="stat-total">0</h3></div>
+        <div class="stat-card pending"><div class="stat-icon"><i class="fas fa-clock"></i></div><p class="stat-label">Pending</p><h3 class="stat-value" id="stat-pending">0</h3></div>
+        <div class="stat-card admitted"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><p class="stat-label">Admitted</p><h3 class="stat-value" id="stat-admitted">0</h3></div>
+        <div class="stat-card rejected"><div class="stat-icon"><i class="fas fa-times-circle"></i></div><p class="stat-label">Not Admitted</p><h3 class="stat-value" id="stat-rejected">0</h3></div>
+        <div class="stat-card today"><div class="stat-icon"><i class="fas fa-calendar-day"></i></div><p class="stat-label">Today</p><h3 class="stat-value" id="stat-today">0</h3></div>
+        <div class="stat-card month"><div class="stat-icon"><i class="fas fa-calendar-alt"></i></div><p class="stat-label">This Month</p><h3 class="stat-value" id="stat-month">0</h3></div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header"><h3><i class="fas fa-map-marker-alt"></i> Applications by District</h3></div>
+          <div class="chart-body"><canvas id="chart-district"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><h3><i class="fas fa-venus-mars"></i> Applications by Gender</h3></div>
+          <div class="chart-body"><canvas id="chart-gender"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><h3><i class="fas fa-chart-line"></i> Daily Applications</h3></div>
+          <div class="chart-body"><canvas id="chart-daily"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Recent Applications -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3>Recent Applications</h3>
+          <a href="#" class="btn btn-sm btn-primary-solid" data-page="applications">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>#</th><th>Child Name</th><th>Gender</th><th>Parent</th><th>District</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="recent-table-body"><tr><td colspan="7" class="table-empty"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== APPLICATIONS PAGE ===== -->
+    <div class="admin-page" id="page-applications">
+      <div class="page-header">
+        <h1>Applications</h1>
+        <p>Manage all admission applications</p>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="filter-card">
+        <div class="filter-row">
+          <div class="filter-search">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search" placeholder="Search by name, phone, ID, district, app #..." />
+          </div>
+          <select id="statusFilter"><option value="All">All Status</option><option value="Pending">Pending</option><option value="Admitted">Admitted</option><option value="Not Admitted">Not Admitted</option></select>
+          <select id="timeFilter"><option value="All">All Time</option><option value="today">Today</option><option value="week">This Week</option><option value="month">This Month</option></select>
+        </div>
+        <div class="filter-actions">
+          <div class="bulk-actions" id="bulk-actions" style="display:none;">
+            <span id="selected-count">0 selected</span>
+            <button class="btn btn-sm btn-success" onclick="bulkAdmit()"><i class="fas fa-check"></i> Admit</button>
+            <button class="btn btn-sm btn-danger" onclick="bulkReject()"><i class="fas fa-times"></i> Reject</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="bulkExportExcel()"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="bulkExportPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="bulkPrint()"><i class="fas fa-print"></i> Print</button>
+            <button class="btn btn-sm btn-danger" onclick="bulkDelete()"><i class="fas fa-trash"></i> Delete</button>
+          </div>
+          <div class="filter-right">
+            <button class="btn btn-sm btn-outline-dark" onclick="exportAllExcel()"><i class="fas fa-file-excel"></i> Export All Excel</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="exportAllPDF()"><i class="fas fa-file-pdf"></i> Export All PDF</button>
+            <button class="btn btn-sm btn-outline-dark" onclick="loadApplications()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3>All Applications</h3>
+          <span class="result-count" id="result-count"></span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="select-all" /></th>
+                <th>#</th><th>Child Name</th><th>Gender</th><th>DOB</th><th>Father</th><th>Mother</th><th>District</th><th>Status</th><th>Date</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"><tr><td colspan="11" class="table-empty"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+
+    <!-- ===== REPORTS PAGE ===== -->
+    <div class="admin-page" id="page-reports">
+      <div class="page-header"><h1>Reports</h1><p>Generate and export admission reports</p></div>
+      <div class="reports-grid">
+        <div class="report-card">
+          <div class="report-icon" style="background:rgba(13,71,161,0.08);color:var(--primary);"><i class="fas fa-file-excel"></i></div>
+          <h3>Excel Report</h3>
+          <p>Export all application data as an Excel spreadsheet.</p>
+          <button class="btn btn-sm btn-primary-solid" onclick="exportAllExcel()"><i class="fas fa-download"></i> Download Excel</button>
+        </div>
+        <div class="report-card">
+          <div class="report-icon" style="background:rgba(211,47,47,0.08);color:#D32F2F;"><i class="fas fa-file-pdf"></i></div>
+          <h3>PDF Report</h3>
+          <p>Generate a professional PDF report of all applications.</p>
+          <button class="btn btn-sm btn-danger" onclick="exportAllPDF()"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+        <div class="report-card">
+          <div class="report-icon" style="background:rgba(46,125,50,0.08);color:var(--success);"><i class="fas fa-file-csv"></i></div>
+          <h3>CSV Report</h3>
+          <p>Download application data as a CSV file for analysis.</p>
+          <button class="btn btn-sm btn-success" onclick="exportAllCSV()"><i class="fas fa-download"></i> Download CSV</button>
+        </div>
+      </div>
+      <div class="reports-grid" style="margin-top:24px;">
+        <div class="section-card">
+          <div class="section-card-header"><h3><i class="fas fa-chart-pie"></i> Admission Statistics</h3></div>
+          <div class="report-stats" id="report-stats"></div>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header"><h3><i class="fas fa-map"></i> District Statistics</h3></div>
+          <div class="report-stats" id="district-stats"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COMMUNICATION PAGE ===== -->
+    <div class="admin-page" id="page-communication">
+      <div class="page-header">
+        <h1>Communication Center</h1>
+        <p>Manage announcements, messages, and notifications</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="comm-tabs">
+        <button class="comm-tab active" data-tab="announcements"><i class="fas fa-bullhorn"></i> Announcements</button>
+        <button class="comm-tab" data-tab="messages"><i class="fas fa-envelope"></i> Messages</button>
+        <button class="comm-tab" data-tab="templates"><i class="fas fa-file-alt"></i> Templates</button>
+        <button class="comm-tab" data-tab="history"><i class="fas fa-history"></i> History</button>
+      </div>
+
+      <!-- Announcements Tab -->
+      <div class="comm-panel active" id="tab-announcements">
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3><i class="fas fa-bullhorn"></i> Announcements</h3>
+            <button class="btn btn-sm btn-primary-solid" onclick="openAnnouncementModal()"><i class="fas fa-plus"></i> New Announcement</button>
+          </div>
+          <div id="announcements-list" class="announcements-list">
+            <div class="empty-state"><i class="fas fa-bullhorn"></i><p>No announcements yet.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages Tab -->
+      <div class="comm-panel" id="tab-messages">
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3><i class="fas fa-envelope"></i> Messages</h3>
+            <button class="btn btn-sm btn-primary-solid" onclick="openNewMessageModal()"><i class="fas fa-plus"></i> New Message</button>
+          </div>
+          <div id="messages-list" class="messages-list">
+            <div class="empty-state"><i class="fas fa-envelope-open"></i><p>No messages yet.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Templates Tab -->
+      <div class="comm-panel" id="tab-templates">
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3><i class="fas fa-file-alt"></i> Message Templates</h3>
+          </div>
+          <div class="templates-grid" id="templates-grid"></div>
+        </div>
+      </div>
+
+      <!-- History Tab -->
+      <div class="comm-panel" id="tab-history">
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3><i class="fas fa-history"></i> Communication History</h3>
+          </div>
+          <div id="comm-history-list" class="comm-history-list">
+            <div class="empty-state"><i class="fas fa-history"></i><p>No communication history yet.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NOTIFICATIONS PAGE ===== -->
+    <div class="admin-page" id="page-notifications">
+      <div class="page-header"><h1>Notifications</h1><p>System notifications and activity log</p></div>
+      <div class="section-card">
+        <div class="section-card-header"><h3>Recent Activity</h3><button class="btn btn-sm btn-outline-dark" onclick="clearNotifications()"><i class="fas fa-trash"></i> Clear All</button></div>
+        <div class="notifications-list" id="notifications-list">
+          <div class="empty-state"><i class="fas fa-bell-slash"></i><p>No notifications yet.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE PAGE ===== -->
+    <div class="admin-page" id="page-profile">
+      <div class="page-header"><h1>Administrator Profile</h1><p>Manage your account settings</p></div>
+      <div class="profile-grid">
+        <div class="section-card profile-card-left">
+          <div class="profile-avatar">
+            <img src="IMAGES/logo.jpeg" alt="Admin" id="profile-pic" />
+            <label for="profile-pic-input" class="profile-pic-edit"><i class="fas fa-camera"></i></label>
+            <input type="file" id="profile-pic-input" accept="image/*" style="display:none;" />
+          </div>
+          <h3>Administrator</h3>
+          <p>valentinuwi@gmail.com</p>
+        </div>
+        <div class="section-card profile-card-right">
+          <div class="section-card-header"><h3>Profile Information</h3></div>
+          <div class="profile-form">
+            <div class="form-group"><label>Full Name</label><input type="text" id="profile-name" value="Administrator" /></div>
+            <div class="form-group"><label>Email</label><input type="email" id="profile-email" value="valentinuwi@gmail.com" disabled /></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="profile-phone" placeholder="+250 785 453 082" /></div>
+            <div class="section-card-header" style="margin-top:24px;"><h3>Change Password</h3></div>
+            <div class="form-group"><label>Current Password</label><input type="password" id="current-password" placeholder="Enter current password" /></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="new-password" placeholder="Enter new password" /></div>
+            <div class="form-group"><label>Confirm Password</label><input type="password" id="confirm-password" placeholder="Confirm new password" /></div>
+            <button class="btn btn-primary-solid" onclick="saveProfile()" style="margin-top:16px;"><i class="fas fa-save"></i> Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== VIEW MODAL ===== -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2 id="modal-title">Application Details</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="modal-section">
+            <h3><i class="fas fa-child"></i> Child Information</h3>
+            <div class="field"><p class="field-label">Application #</p><p class="field-value" id="modal-app-number"></p></div>
+            <div class="field"><p class="field-label">Full Name</p><p class="field-value" id="modal-child-name"></p></div>
+            <div class="field"><p class="field-label">Gender</p><p class="field-value" id="modal-gender"></p></div>
+            <div class="field"><p class="field-label">Date of Birth</p><p class="field-value" id="modal-dob"></p></div>
+            <div class="field"><p class="field-label">Applying Class</p><p class="field-value" id="modal-class"></p></div>
+          </div>
+          <div class="modal-section">
+            <h3><i class="fas fa-check-circle"></i> Admission Status</h3>
+            <div id="modal-status-badge"></div>
+            <div class="status-buttons" id="modal-status-buttons"></div>
+          </div>
+          <div class="modal-section">
+            <h3><i class="fas fa-male"></i> Father's Information</h3>
+            <div class="field"><p class="field-label">Full Name</p><p class="field-value" id="modal-father-name"></p></div>
+            <div class="field"><p class="field-label">National ID</p><p class="field-value" id="modal-father-id"></p></div>
+            <div class="field"><p class="field-label">Telephone</p><p class="field-value" id="modal-father-phone"></p></div>
+          </div>
+          <div class="modal-section">
+            <h3><i class="fas fa-female"></i> Mother's Information</h3>
+            <div class="field"><p class="field-label">Full Name</p><p class="field-value" id="modal-mother-name"></p></div>
+            <div class="field"><p class="field-label">National ID</p><p class="field-value" id="modal-mother-id"></p></div>
+            <div class="field"><p class="field-label">Telephone</p><p class="field-value" id="modal-mother-phone"></p></div>
+          </div>
+          <div class="modal-section">
+            <h3><i class="fas fa-home"></i> Address</h3>
+            <div class="field"><p class="field-label">Province</p><p class="field-value" id="modal-province"></p></div>
+            <div class="field"><p class="field-label">District</p><p class="field-value" id="modal-district"></p></div>
+            <div class="field"><p class="field-label">Sector</p><p class="field-value" id="modal-sector"></p></div>
+            <div class="field"><p class="field-label">Cell</p><p class="field-value" id="modal-cell"></p></div>
+            <div class="field"><p class="field-label">Village</p><p class="field-value" id="modal-village"></p></div>
+            <div class="field"><p class="field-label">Submitted</p><p class="field-value" id="modal-date"></p></div>
+          </div>
+          <div class="modal-section">
+            <h3><i class="fas fa-folder-open"></i> Uploaded Documents</h3>
+            <div id="modal-documents"></div>
+          </div>
+          <div class="modal-section" style="grid-column: 1 / -1;">
+            <h3><i class="fas fa-comments"></i> Communication</h3>
+            <div class="comm-timeline" id="modal-comm-timeline"></div>
+            <div class="comm-compose">
+              <div class="comm-templates-bar" id="modal-templates-bar"></div>
+              <div class="comm-input-row">
+                <textarea id="modal-comm-input" placeholder="Type a message to this parent..." rows="2"></textarea>
+                <button class="btn btn-sm btn-primary-solid" onclick="sendAppMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-outline-dark" onclick="printApplication()"><i class="fas fa-print"></i> Print</button>
+        <button class="btn btn-sm btn-primary-solid" onclick="openEditModal()"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteApplication()"><i class="fas fa-trash"></i> Delete</button>
+        <button class="btn btn-sm btn-outline-dark" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IMAGE PREVIEW MODAL ===== -->
+  <div class="modal-overlay" id="image-modal">
+    <div class="modal" style="max-width:90vw; background:transparent; box-shadow:none;">
+      <button class="modal-close" onclick="closeImageModal()" style="position:fixed; top:20px; right:20px; z-index:1001; background:rgba(0,0,0,0.5); color:#fff;">&times;</button>
+      <img id="image-preview" src="" style="max-width:90vw; max-height:90vh; border-radius:12px;" />
+    </div>
+  </div>
+
+  <!-- ===== EDIT MODAL ===== -->
+  <div class="modal-overlay" id="edit-modal-overlay">
+    <div class="modal modal-md">
+      <div class="modal-header">
+        <h2>Edit Application</h2>
+        <button class="modal-close" onclick="closeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-form" class="edit-form-grid">
+          <div class="form-group"><label>Child's Full Name *</label><input type="text" id="edit-child-full-name" required /></div>
+          <div class="form-group"><label>Gender *</label><select id="edit-gender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+          <div class="form-group"><label>Date of Birth *</label><input type="date" id="edit-date-of-birth" required /></div>
+          <div class="form-group"><label>Applying Class</label><input type="text" id="edit-applying-class" /></div>
+          <div class="form-group"><label>Father's Full Name</label><input type="text" id="edit-father-name" /></div>
+          <div class="form-group"><label>Father's National ID</label><input type="text" id="edit-father-id" /></div>
+          <div class="form-group"><label>Father's Phone</label><input type="tel" id="edit-father-phone" /></div>
+          <div class="form-group"><label>Mother's Full Name</label><input type="text" id="edit-mother-name" /></div>
+          <div class="form-group"><label>Mother's National ID</label><input type="text" id="edit-mother-id" /></div>
+          <div class="form-group"><label>Mother's Phone</label><input type="tel" id="edit-mother-phone" /></div>
+          <div class="form-group"><label>Province</label><input type="text" id="edit-province" /></div>
+          <div class="form-group"><label>District</label><input type="text" id="edit-district" /></div>
+          <div class="form-group"><label>Sector</label><input type="text" id="edit-sector" /></div>
+          <div class="form-group"><label>Cell</label><input type="text" id="edit-cell" /></div>
+          <div class="form-group"><label>Village</label><input type="text" id="edit-village" /></div>
+          <div class="form-group"><label>Status</label><select id="edit-status"><option value="Pending">Pending</option><option value="Admitted">Admitted</option><option value="Not Admitted">Not Admitted</option></select></div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary-solid" id="save-edit-btn" onclick="saveEdit()"><i class="fas fa-save"></i> Save Changes</button>
+        <button class="btn btn-sm btn-outline-dark" onclick="closeEditModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ANNOUNCEMENT MODAL ===== -->
+  <div class="modal-overlay" id="announcement-modal">
+    <div class="modal modal-md">
+      <div class="modal-header">
+        <h2 id="ann-modal-title">New Announcement</h2>
+        <button class="modal-close" onclick="closeAnnouncementModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="announcement-form">
+          <input type="hidden" id="ann-id" />
+          <div class="form-group" style="margin-bottom:14px;"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Title *</label><input type="text" id="ann-title" required style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;" /></div>
+          <div class="form-group" style="margin-bottom:14px;"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Message *</label><textarea id="ann-message" required rows="4" style="width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;resize:vertical;"></textarea></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div class="form-group"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Category</label><select id="ann-category" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;"><option>General</option><option>Admission</option><option>Urgent</option><option>Event</option></select></div>
+            <div class="form-group"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Priority</label><select id="ann-priority" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;"><option>Low</option><option>Medium</option><option>High</option></select></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div class="form-group"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Target Audience</label><select id="ann-audience" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;"><option value="All">All Applicants</option><option value="Pending">Pending</option><option value="Admitted">Admitted</option><option value="Not Admitted">Not Admitted</option></select></div>
+            <div class="form-group"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Status</label><select id="ann-status" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;"><option>Draft</option><option>Published</option></select></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Publish Date</label><input type="datetime-local" id="ann-publish" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;" /></div>
+            <div class="form-group"><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Expiry Date</label><input type="datetime-local" id="ann-expiry" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;" /></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary-solid" onclick="saveAnnouncement()"><i class="fas fa-save"></i> Save</button>
+        <button class="btn btn-sm btn-outline-dark" onclick="closeAnnouncementModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NEW MESSAGE MODAL ===== -->
+  <div class="modal-overlay" id="new-message-modal">
+    <div class="modal modal-md">
+      <div class="modal-header">
+        <h2>New Message</h2>
+        <button class="modal-close" onclick="closeNewMessageModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">To (Application #)</label>
+          <select id="msg-recipient" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Quick Template</label>
+          <select id="msg-template-select" onchange="applyMsgTemplate()" style="width:100%;height:40px;padding:0 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;background:#fff;">
+            <option value="">None</option>
+            <option value="received">Application Received</option>
+            <option value="review">Under Review</option>
+            <option value="doc-request">Document Request</option>
+            <option value="approved">Admission Approved</option>
+            <option value="declined">Admission Declined</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px;">Message *</label>
+          <textarea id="msg-content" required rows="5" style="width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;resize:vertical;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary-solid" onclick="sendNewMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+        <button class="btn btn-sm btn-outline-dark" onclick="closeNewMessageModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM DIALOG -->
+  <div class="modal-overlay" id="confirm-overlay">
+    <div class="confirm-dialog">
+      <div class="confirm-icon" id="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <h3 id="confirm-title">Are you sure?</h3>
+      <p id="confirm-message">This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-sm btn-outline-dark" onclick="confirmCancel()">Cancel</button>
+        <button class="btn btn-sm btn-danger" id="confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRINT AREA -->
+  <div id="print-area" class="print-area" style="display:none;"></div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+  <script src="js/communication.js"></script>
+</body>
+</html>
