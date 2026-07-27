@@ -630,6 +630,7 @@ function openModal(id) {
       '<div class="doc-info"><i class="fas fa-file-' + (isPdf ? 'pdf' : 'image') + ' doc-icon"></i><div><p class="doc-name">' + esc(selectedApp.birth_certificate_name) + '</p><p class="doc-meta">Birth Certificate</p></div></div>' +
       '<div class="doc-actions">' +
       (isImage ? '<button class="btn btn-sm btn-outline-dark" onclick="previewImage(\'' + selectedApp.birth_certificate_data + '\')"><i class="fas fa-eye"></i> Preview</button>' : '') +
+      (isPdf && selectedApp.birth_certificate_data ? '<button class="btn btn-sm btn-outline-dark" onclick="previewPdf(\'' + selectedApp.birth_certificate_data + '\')"><i class="fas fa-eye"></i> Preview</button>' : '') +
       (selectedApp.birth_certificate_data ? '<a class="btn btn-sm btn-primary-solid" href="' + selectedApp.birth_certificate_data + '" download="' + esc(selectedApp.birth_certificate_name) + '"><i class="fas fa-download"></i> Download</a>' : '') +
       '</div></div>';
   } else {
@@ -650,6 +651,20 @@ document.getElementById("modal-overlay").addEventListener("click", function (e) 
 function previewImage(src) {
   document.getElementById("image-preview").src = src;
   document.getElementById("image-modal").classList.add("open");
+}
+
+function previewPdf(dataUri) {
+  try {
+    var wind = window.open();
+    if (wind) {
+      wind.document.write('<iframe src="' + dataUri + '" frameborder="0" style="position:fixed; border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>');
+      wind.document.title = "Birth Certificate PDF Preview";
+    } else {
+      alert("Popup blocker blocked the PDF preview. Please allow popups for this site.");
+    }
+  } catch (e) {
+    console.error("PDF preview error:", e);
+  }
 }
 
 function closeImageModal() {
